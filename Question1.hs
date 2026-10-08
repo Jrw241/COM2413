@@ -2,23 +2,32 @@ generator1 :: [(Int,Int,Int,Int)]
 generator1 = 
     [(x,98-x,y,98-y)| x <- [1..49], y <- [1..49]]
 
+x_generator1 :: Int
+x_generator1
+  = length [ t | t <- [ t1 , t2 , t3 , t4 , t5 ] , t ]
+  where
+  t1 = ( 3 , 95 , 33 , 65) `elem ` generator1
+  t2 = ( 6 , 92 , 16 , 82) `elem ` generator1
+  t3 = (13 , 85 , 43 , 55) `elem ` generator1
+  t4 = (18 , 87 , 12 , 76) `notElem ` generator1
+  t5 = (28 , 54 , 7 , 91) `notElem ` generator1
+
+
 selector1 :: (Int, Int, Int, Int) -> Bool
 selector1 (a, b, c, d) 
     | not (isTriangle 70 a b) || not (isTriangle 70 c d) = False
-    | otherwise = isInteger s1 && isInteger s2 && s1 - s2 == 504.0
+    | otherwise = isInteger s1 && isInteger s2 && (s1 - s2 == 504.0 ||s2 - s1 == 504.0)
   where
     s1 = triangleArea 70 a b
     s2 = triangleArea 70 c d
 
---checks whether the 3 sides create an actual triangle
+
 isTriangle :: Int -> Int -> Int -> Bool
 isTriangle a b c = a + b > c && a + c > b && b + c > a
 
---checks whether the traingle area is an integer
 isInteger :: Double -> Bool
 isInteger x = abs (x - fromIntegral (round x :: Integer)) < 1e-6
 
---using herons formula to calculate the area of the triangle
 triangleArea :: Int -> Int -> Int -> Double
 triangleArea a b c = sqrt (s * (s - ax) * (s - bx) * (s - cx))
   where
