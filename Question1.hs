@@ -1,17 +1,6 @@
 generator1 :: [(Int,Int,Int,Int)]
 generator1 = 
-    [(x,98-x,y,98-y)| x <- [1..49], y <- [1..49]]
-
-x_generator1 :: Int
-x_generator1
-  = length [ t | t <- [ t1 , t2 , t3 , t4 , t5 ] , t ]
-  where
-  t1 = ( 3 , 95 , 33 , 65) `elem ` generator1
-  t2 = ( 6 , 92 , 16 , 82) `elem ` generator1
-  t3 = (13 , 85 , 43 , 55) `elem ` generator1
-  t4 = (18 , 87 , 12 , 76) `notElem ` generator1
-  t5 = (28 , 54 , 7 , 91) `notElem ` generator1
-
+    [(x, 98-x, y, 98-y)| x <- [1..49], y <- [1..49]]
 
 selector1 :: (Int, Int, Int, Int) -> Bool
 selector1 (a, b, c, d) 
