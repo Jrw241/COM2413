@@ -1,6 +1,6 @@
-import Data.List((\\))
+import Data.List ((\\))
 
-type Grid = [String] -- A list of 3 Strings, each 3 Chars long
+type Grid = (String, String, String)
 
 -- Generates possible solutions for the teaser
 generator4 :: [String] 
@@ -27,7 +27,7 @@ possibleMGrids n =
   | r1 <- n:possibleRows
   , r2 <- n:possibleRows
   , r3 <- n:possibleRows
-  , let g = [r1, r2, r3]
+  , let g = (r1, r2, r3)
   , isUnique (gridLines g)
   , countReversible g == 7
   , length (gridLines g \\ [n]) == 7
@@ -63,18 +63,18 @@ isUnique []     = True
 
 -- Generates all grids formed by changing exactly one character to another odd digit
 singleDigitModifications :: Grid -> [Grid]
-singleDigitModifications [[a,b,c], [d,e,f], [g,h,i]] =
-  [ [[a',b,c], [d,e,f], [g,h,i]] | a' <- odd, a' /= a ] ++
-  [ [[a,b',c], [d,e,f], [g,h,i]] | b' <- odd, b' /= b ] ++
-  [ [[a,b,c'], [d,e,f], [g,h,i]] | c' <- odd, c' /= c ] ++
-  [ [[a,b,c], [d',e,f], [g,h,i]] | d' <- odd, d' /= d ] ++
-  [ [[a,b,c], [d,e',f], [g,h,i]] | e' <- odd, e' /= e ] ++
-  [ [[a,b,c], [d,e,f'], [g,h,i]] | f' <- odd, f' /= f ] ++
-  [ [[a,b,c], [d,e,f], [g',h,i]] | g' <- odd, g' /= g ] ++
-  [ [[a,b,c], [d,e,f], [g,h',i]] | h' <- odd, h' /= h ] ++
-  [ [[a,b,c], [d,e,f], [g,h,i']] | i' <- odd, i' /= i ]
+singleDigitModifications ([a,b,c], [d,e,f], [g,h,i]) =
+  [ ([a',b,c], [d,e,f], [g,h,i]) | a' <- oddDigits \\ [a] ] ++
+  [ ([a,b',c], [d,e,f], [g,h,i]) | b' <- oddDigits \\ [b] ] ++
+  [ ([a,b,c'], [d,e,f], [g,h,i]) | c' <- oddDigits \\ [c] ] ++
+  [ ([a,b,c], [d',e,f], [g,h,i]) | d' <- oddDigits \\ [d] ] ++
+  [ ([a,b,c], [d,e',f], [g,h,i]) | e' <- oddDigits \\ [e] ] ++
+  [ ([a,b,c], [d,e,f'], [g,h,i]) | f' <- oddDigits \\ [f] ] ++
+  [ ([a,b,c], [d,e,f], [g',h,i]) | g' <- oddDigits \\ [g] ] ++
+  [ ([a,b,c], [d,e,f], [g,h',i]) | h' <- oddDigits \\ [h] ] ++
+  [ ([a,b,c], [d,e,f], [g,h,i']) | i' <- oddDigits \\ [i] ]
   where
-    odd = ['1', '3'..'9']
+    oddDigits = ['1', '3'..'9']
 
 -- Counts how many lines in a grid are reversible primes
 countReversible :: Grid -> Int
@@ -82,7 +82,7 @@ countReversible g = length (filter isReversiblePrime (gridLines g))
 
 -- Extracts the 8 lines of a 3x3 grid
 gridLines :: Grid -> [String]
-gridLines [[g00, g01, g02], [g10, g11, g12], [g20, g21, g22]] =
+gridLines ([g00, g01, g02], [g10, g11, g12], [g20, g21, g22]) =
   [ [g00, g01, g02]
   , [g10, g11, g12]
   , [g20, g21, g22]
