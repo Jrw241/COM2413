@@ -26,22 +26,22 @@ generator3 =
     suits = ['S', 'H', 'C', 'D']
     nums  = [1..13]
 
--- exchanges the final hand to get the first hand as it is the same swap,
--- makes sure all numbers are different as well as all the suits are different
+-- Exchanges the final hand to get the first hand as it is the same swap,
+-- Makes sure all numbers are different as well as all the suits are different
 exchange :: Game -> [Game]
 exchange (((s1, n1), (s2, n2)), ((s3, n3), (s4, n4)))
   | n1 == n3  = []
   | otherwise =
       [ (((s1, n1), (s2', n2')), ((s3, n3), (s4', n4')))
-      -- Pick candidate card for Hand 1 (excluding values n1 and n3)
+      -- Pick available card for Hand 1 (excluding values n1 and n3)
       | (s2', n2') <- availableCards [n1, n3] usedSuits initCards 
-      -- Pick candidate card for Hand 2 (excluding values n1, n3 and n2')
+      -- Pick available card for Hand 2 (excluding values n1, n3 and n2')
       , (s4', n4') <- availableCards [n1, n3, n2'] usedSuits initCards
-      -- ensures cards are not the same
+      -- Ensures cards are not the same
       , (s2', n2') /= (s4', n4') 
-      -- checks the suits aren't the same
+      -- Checks the suits aren't the same
       , s2' /= s4' 
-      -- checks the handsums to check they stay the same
+      -- Checks the handsums to check they stay the same
       , handSum ((s1, n1), (s2', n2')) == joInit
       , handSum ((s3, n3), (s4', n4')) == boInit
       ]
@@ -51,25 +51,25 @@ exchange (((s1, n1), (s2, n2)), ((s3, n3), (s4, n4)))
     joInit    = handSum ((s1, n1), (s2, n2))
     boInit    = handSum ((s3, n3), (s4, n4))
 
--- finds all valid replacement cards in the deck, that can replace (s2,n2) and (s4,n4)
+-- Finds all valid replacement cards in the deck, that can replace (s2,n2) and (s4,n4)
 availableCards :: [Int] -> [Char] -> [Card] -> [Card]
 availableCards usedNums usedSuits initCards =
   [ (s, n)
-  -- all suit that aren't in the used suits
+  -- All suit that aren't in the used suits
   | s <- ['S', 'H', 'C', 'D'] \\ usedSuits
-  -- checks number are in used nums
+  -- Checks number are in used nums
   , n <- [1..13] \\ usedNums
-  -- checks the generated card isn't in the initial cards
+  -- Checks the generated card isn't in the initial cards
   , (s, n) `notElem` initCards
   ]
 
---checks if the gmae inputs is an answer to the teaser
+-- Checks if the game input satisfies the teaser conditions
 selector3 :: Game -> Bool
 selector3 (h1, h2)
-  -- checks whether the card sums are integers, and that they follow the condition
+  -- Checks whether the card sums are integers, and that they follow the condition
   -- joInit > 0 and boInit = -joInit
   | not (isInteger joInit) || joInit < 0 || joInit /= -boInit = False
-  -- otherwise check if there is an exchange possible
+  -- Otherwise check if there is an exchange possible
   | otherwise = not (null (exchange (h1, h2)))
   where
     joInit = handSum h1
@@ -82,9 +82,9 @@ isInteger x = floor x == ceiling x
 -- Gets the sum of the input hand
 handSum :: Hand -> Double
 handSum ((s1, n1), (s2, n2))
-  -- first checks the face values of the cards to see if they are equal (return 0)
+  -- First checks the face values of the cards to see if they are equal (return 0)
   | n1 == n2  = 0
-  -- otherwise calculate the card values using the helper function
+  -- Otherwise calculate the card values using the helper function
   | otherwise = card1 + card2
   where
     dn1   = fromIntegral n1

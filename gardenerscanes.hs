@@ -1,14 +1,18 @@
+-- Uses types to increase readability of the code
+type BambooLengths = (Int,Int,Int,Int)
+
 -- Generates all viable bamboo lengths, without order 
 -- (so will get 2 possible options for the answer)
-generator1 :: [(Int, Int, Int, Int)]
+generator1 :: [BambooLengths]
 generator1 = 
-  [ (x, 98 - x, y, 98 - y) 
+  [ lengths -- (a,b,c,d), a <= b, c <= d
   | x <- [1..49]
   , y <- [1..49]
+  , let lengths = (x, 98-x, y,98 - y)
   ]
 
---checks if the inputs is an answer to the teaser
-selector1 :: (Int, Int, Int, Int) -> Bool
+-- Checks if the bamboo lengths input satisfies the teaser conditions
+selector1 :: BambooLengths -> Bool
 selector1 (a, b, c, d) 
   -- First checks that they are both valid triangles
   | not (isTriangle 70 a b) || not (isTriangle 70 c d) = False
