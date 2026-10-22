@@ -103,23 +103,6 @@ prime n
 isReversiblePrime :: String -> Bool
 isReversiblePrime n = prime (read n) && prime (read (reverse n))
 
-x_generator4 :: Int
-x_generator4 = length [t | t <- [t1, t2, t3, t4, t5], t]
-  where
-    t1 = "331" `elem` generator4
-    t2 = "557" `elem` generator4
-    t3 = "593" `elem` generator4
-    t4 = "151" `notElem` generator4
-    t5 = "991" `notElem` generator4
-
-x_selector4 :: Int
-x_selector4 = length [t | t <- [t1, t2, t3, t4, t5], t]
-  where
-    t1 = selector4 "193" == False
-    t2 = selector4 "397" == False
-    t3 = selector4 "557" == False
-    t4 = selector4 "911" == False
-    t5 = selector4 "997" == False
-
+-- Prints the answer(s) to the teaser
 main :: IO () 
 main = print (filter selector4 generator4)
